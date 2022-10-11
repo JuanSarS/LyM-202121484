@@ -1,0 +1,78 @@
+
+/// Juan Diego Sarmiento Sánchez 202121484 Practical Quiz 2 ()
+
+using gold.**
+var  A  
+
+procedure main(args:String[])begin
+   A:= ('a'‥'g')
+   
+   M :=createFA()
+   testPerm(M)
+   end
+   
+function createFA():IAutomaton 
+begin
+	estados:={'S','T','X'}
+	Xs:= A
+	
+	Q :={⟨estado,letras1,letras2⟩ | estado in estados ,letras1 in ℘(Xs),letras2 in ℘(Xs)}∪{0}∪{1}
+	te:={'a','b','c','d','e','f','g','$','='}
+	q₀:= ⟨'S',Ø,Ø⟩
+	F :={⟨'X',letras1,letras2⟩ | letras1 in ℘(Xs) , letras2 in ℘(Xs)} 
+	
+    M:=GDeterministicAutomaton(Q,te,q₀,F,delta)
+	return M
+end
+
+function delta(q,s) 
+   begin 
+     return 0
+   end
+
+
+function delta(⟨estado,letras1,letras2⟩,s) 
+   begin 
+      if estado = 'S' then 
+      	 if s ='$' then return ⟨'T',letras1,letras2⟩
+      	 elseif s ∉ letras1 and  s != '=' then return ⟨estado,letras1∪{s},letras2⟩
+        else return 0
+        end
+      elseif estado = 'T' then
+      	 if s = '=' then return ⟨'X',letras1,letras2⟩
+      	 elseif s∉letras2 and s!= '$' then return ⟨estado,letras1,letras2∪{s}⟩	
+      	 else return 0	
+        end 
+      elseif estado = 'X' then  
+        if s∈letras1 and s∉letras2 and s!= '$' and s!='=' then  return  ⟨'X',letras1,letras2∪{s}⟩
+      	 else return 0
+        end  
+      end
+   end
+   
+procedure testPerm(C:IAutomaton) begin
+ 	var sc:java.util.Scanner(System.$in)
+ 	var  string: String
+   	
+     
+   	print  "Testing"
+
+	while true do
+		print "----------------------------"
+		print "Enter a string:"
+		string:=sc.nextLine()
+		if string = "STOP" then  break end
+		result:=C.acceptsString(string)
+		print "The string was "+(result?"accepted":"REJECTED") 
+	end
+	print "End test"
+ 
+ end
+ 	
+   
+  
+  
+  
+
+    
+
